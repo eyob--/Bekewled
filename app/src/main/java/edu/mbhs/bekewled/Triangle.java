@@ -292,7 +292,7 @@ public class Triangle {
             return false;
         }
 
-        setCenterX()
+        setCenterX(centerX+moveInc/3);
 
         return true;
     }
