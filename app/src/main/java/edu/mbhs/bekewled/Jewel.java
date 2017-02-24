@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 
 public class Jewel {
 
-    private Sprite picture;
+    private Triangle picture;
+    private int row;
+    private int col;
 
     public enum JewelType{
 
@@ -19,8 +21,15 @@ public class Jewel {
             special = cool;
         }
     }
-
-    public Jewel(int type, Bitmap b, int row, int col){
+//lets have min row/col be 0, max be 8
+    public Jewel(int type, Bitmap b, int roe, int cahl){
+        picture = new Triangle(0.1, (cahl-4)/4*0.8, (roe-4)/4*0.8, b);
+        row = roe;
+        col = cahl;
+    }
+    public void setpos(int roo, int cool){
+        row = roo;
+        col = cool;
 
     }
 
