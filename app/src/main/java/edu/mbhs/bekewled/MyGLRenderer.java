@@ -38,7 +38,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Temporary create a bitmap
         Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
-        tri = new Triangle(1/4.0, 0, 0, bmp);
+        tri = new Triangle(1/4., -1/8., -1/8., bmp);
 
         /*for (int i = -8; i<8; i++){
             for(int j = -8; j<8; j++){
@@ -65,17 +65,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         float[] scratch = new float[16];
 
-      /*  long time = SystemClock.uptimeMillis() % 4000L;
+        long time = SystemClock.uptimeMillis() % 4000L;
         float angle = 0.090f *(((int) time));
-        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1f);*/
+        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1f);
 
         //originally 3 was -3. I think I am right but maybe I am wrong and the tutorial was right.
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
-       // Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
+        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
 
-        tri.draw(mMVPMatrix);
+        tri.draw(scratch);
        /* for (Triangle t : triangles) {
             t.draw(mMVPMatrix);
         }*/
