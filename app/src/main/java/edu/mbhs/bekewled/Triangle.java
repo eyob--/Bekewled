@@ -78,9 +78,14 @@ public class Triangle {
     private float centerY = 0;
     private float scale = 1;
     private float[] triangleCoords = baseTriangleCoords;
+
+    private float destX = Float.NaN;
+    private float destY = Float.NaN;
+
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
 
     float[] color = {0.637f, 0.770f, 0.223f, 1.0f};
+    private float moveInc = 0.1f;
 
     public Triangle() {
         setupPos();
@@ -256,5 +261,40 @@ public class Triangle {
         this.scale = s;
     }
 
+    public void setDest(float x, float y){
+        destX = x;
+        destY = y;
+    }
+    public boolean movingHoriz(){
+        if (destX == Float.NaN){
+            return false;
+        }
+        if ((destX-centerX)*(destX-centerX)<moveInc){
+            setCenterX(destX);
+            destX = Float.NaN;
+            return false;
+        }
+        return true;
+    }
+    public boolean movingVert(){
+        if (destY == Float.NaN){
+            return false;
+        }
+        if ((destY-centerY)*(destY-centerY)<moveInc){
+            setCenterY(destY);
+            destY = Float.NaN;
+            return false;
+        }
+        return true;
+    }
+    public boolean moveHoriz(){
+        if (!movingHoriz()){
+            return false;
+        }
+
+        setCenterX()
+
+        return true;
+    }
 
 }
