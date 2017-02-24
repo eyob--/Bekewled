@@ -30,7 +30,10 @@ public class Jewel {
     public void setpos(int roo, int cool){
         row = roo;
         col = cool;
-
+        picture.setDest((cool-4)/4*0.8, (roo-4)/4*0.8);
+    }
+    public void dontMove(){
+        
     }
 
 }
