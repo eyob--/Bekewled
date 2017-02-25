@@ -23,17 +23,21 @@ public class Jewel {
     }
 //lets have min row/col be 0, max be 8
     public Jewel(int type, Bitmap b, int roe, int cahl){
-        picture = new Triangle(0.1, (cahl-4)/4*0.8, (roe-4)/4*0.8, b);
+        System.out.println((cahl-4)/4f*0.8f);
+        picture = new Triangle(0.1, (cahl-4)/4f*0.8, (roe-4)/4f*0.8, b);
         row = roe;
         col = cahl;
     }
     public void setpos(int roo, int cool){
         row = roo;
         col = cool;
-        picture.setDest((cool-4)/4*0.8, (roo-4)/4*0.8);
+        picture.setDest((cool-4)/4f*0.8f, (roo-4)/4f*0.8f);
     }
     public void dontMove(){
         
+    }
+    public void draw(float[] mvpMatrix) {
+        picture.draw(mvpMatrix);
     }
 
 }

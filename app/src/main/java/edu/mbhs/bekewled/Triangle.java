@@ -156,7 +156,7 @@ public class Triangle {
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
 
         // We are done using the bitmap so we should recycle it.
-        bmp.recycle();
+        //bmp.recycle();
     }
     public Triangle(double ex, double wy) {
         float x = (float) ex;

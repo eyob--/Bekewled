@@ -22,6 +22,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mViewMatrix = new float[16];
 
     private Triangle[] triangles = new Triangle[16*16];
+    private Jewel[][] jewels = new Jewel[8][8];
     private Triangle tri;
     private float[] mRotationMatrix = new float[16];
     private Context contxt;
@@ -38,25 +39,31 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Temporary create a bitmap
         Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
-        tri = new Triangle(1/4., -1/8., -1/8., bmp);
+        //tri = new Triangle(1/4., -1/8., -1/8., bmp);
 
-        /*for (int i = -8; i<8; i++){
-            for(int j = -8; j<8; j++){
+        for (int i = 0; i<8; i++){
+            for(int j = 0; j<8; j++){
                 float x = -1/16+i/8f;
                 float y = -1/16+j/8f;
-                triangles[(i+8)*16+j+8] = new Triangle(1/8.0, x, y);
-
+                //triangles[(i+8)*16+j+8] = new Triangle(1/8.0, x, y);
+                jewels[i][j] = new Jewel(1, bmp, i, j);
             }
-        }*/
+        }
 
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        System.out.println(width+" "+height);
         GLES20.glViewport(0, 0, width, height);
-
-        float ratio = (float) width / height;
-        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        if(width < height) {
+            float ratio = (float) height / width;
+            Matrix.frustumM(mProjectionMatrix, 0, -1, 1, -ratio, ratio, 3, 7);
+        }
+        else {
+            float ratio = (float) width / height;
+            Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        }
 
     }
 
@@ -75,10 +82,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
 
-        tri.draw(scratch);
-       /* for (Triangle t : triangles) {
-            t.draw(mMVPMatrix);
-        }*/
+        //tri.draw(scratch);
+        for (Jewel[] js : jewels) {
+            for (Jewel j : js) {
+                j.draw(mMVPMatrix);
+            }
+        }
     }
 
     public static int loadShader(int type, String shaderCode) {
