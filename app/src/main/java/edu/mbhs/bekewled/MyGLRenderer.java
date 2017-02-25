@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.view.MotionEvent;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -54,7 +55,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        System.out.println(width+" "+height);
+        System.out.println(width + " " + height);
         GLES20.glViewport(0, 0, width, height);
         if(width < height) {
             float ratio = (float) height / width;
@@ -81,10 +82,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
-
+        System.out.println("goodbye");
         //tri.draw(scratch);
         for (Jewel[] js : jewels) {
             for (Jewel j : js) {
+                j.doMoves();
                 j.draw(mMVPMatrix);
             }
         }
@@ -95,5 +97,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);
         return shader;
+    }
+
+    public void processTouchEvent(MotionEvent e) {
+        int go1, go2;
+        System.out.println("hello");
+        for(int i = 0; i<jewels.length-1; i+=2){
+            for(int j = 0; j<jewels.length; j++){
+                jewels[i][j].dontMove(i+1,j);
+                jewels[i+1][j].dontMove(i,j);
+            }
+        }
+
+
     }
 }

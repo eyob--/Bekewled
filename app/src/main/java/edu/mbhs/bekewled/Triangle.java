@@ -81,8 +81,10 @@ public class Triangle {
 
     private float destX = Float.NaN;
     private float destY = Float.NaN;
-
+    private float destX2 = Float.NaN;
+    private float destY2 = Float.NaN;
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
+    private Bitmap tinycompass;
 
     float[] color = {0.637f, 0.770f, 0.223f, 1.0f};
     private float moveInc = 0.1f;
@@ -119,6 +121,7 @@ public class Triangle {
         GLES20.glLinkProgram(mProgram);
     }
     private void setupImage(Bitmap bmp){
+        tinycompass = bmp;
         float[] uvs = new float[] {
                 0.0f, 0.0f,
                 0.0f, 1.0f,
@@ -247,6 +250,7 @@ public class Triangle {
             triangleCoords[i+1] = baseTriangleCoords[i+1]*scale + cy;
         }
         this.setupPos();
+        //this.setupImage(tinycompass);
     }
 
     public float getCenterY() {
@@ -265,14 +269,27 @@ public class Triangle {
         destX = x;
         destY = y;
     }
+    public void setDest2(float x, float y){
+        destX = x;
+        destY = y;
+        destX2 = centerX;
+        destY2 = centerY;
+    }
     public boolean movingHoriz(){
         if (destX == Float.NaN){
             return false;
         }
-        if ((destX-centerX)*(destX-centerX)<moveInc){
+        if (Math.abs(destX-centerX)<moveInc){
             setCenterX(destX);
-            destX = Float.NaN;
-            return false;
+            if(destX2 != Float.NaN){
+                destX = destX2;
+                destX2 = Float.NaN;
+                return true;
+            }
+            else{
+                destX = Float.NaN;
+                return false;
+            }
         }
         return true;
     }
@@ -280,10 +297,17 @@ public class Triangle {
         if (destY == Float.NaN){
             return false;
         }
-        if ((destY-centerY)*(destY-centerY)<moveInc){
+        else if (Math.abs(destY-centerY)<moveInc){
             setCenterY(destY);
-            destY = Float.NaN;
-            return false;
+            if(destY2 != Float.NaN){
+                destY = destY2;
+                destY2 = Float.NaN;
+                return true;
+            }
+            else{
+                destY = Float.NaN;
+                return false;
+            }
         }
         return true;
     }
@@ -292,9 +316,17 @@ public class Triangle {
             return false;
         }
 
-        setCenterX(centerX+moveInc/3);
+       setCenterX(centerX+moveInc/3*Math.signum(destX-centerX));
 
         return true;
     }
+    public boolean moveVert(){
+        if (!movingHoriz()){
+            return false;
+        }
+       // setCenterY(centerY+moveInc*Math.signum(destY-centerY));
+        return true;
+    }
+
 
 }

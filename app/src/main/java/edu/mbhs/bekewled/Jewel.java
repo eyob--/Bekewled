@@ -33,11 +33,19 @@ public class Jewel {
         col = cool;
         picture.setDest((cool-4)/4f*0.8f, (roo-4)/4f*0.8f);
     }
-    public void dontMove(){
-        
+    public void dontMove(int roo, int cool){
+        picture.setDest2((cool-4)/4f*0.8f, (roo-4)/4f*0.8f);
     }
     public void draw(float[] mvpMatrix) {
         picture.draw(mvpMatrix);
+    }
+    public void doMoves(){
+        if(picture.movingHoriz()){
+            picture.moveHoriz();
+        }
+        if(picture.movingVert()){
+            picture.moveVert();
+        }
     }
 
 }
