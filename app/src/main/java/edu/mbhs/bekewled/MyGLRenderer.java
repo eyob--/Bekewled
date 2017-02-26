@@ -29,6 +29,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] mRotationMatrix = new float[16];
     private Context contxt;
 
+    private Grid grid;
+
     float screenWidth, screenHeight;
 
     public MyGLRenderer(Context c) {
@@ -37,6 +39,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        startingAnimation();
+
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         int id = contxt.getResources().getIdentifier("drawable/mandy_icon", null,
@@ -54,7 +58,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 jewels[i][j] = new Jewel(1, bmp, i, j);
             }
         }
-
+        grid = new Grid(jewels);
 
     }
 
@@ -111,44 +115,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         if (e.getAction() == MotionEvent.ACTION_UP) {
             int go1, go2;
             System.out.println("hello");
-            if (!(jewels[0][0].getPicture().movingHoriz() || jewels[0][0].getPicture().movingVert())) {
-                for (int i = 0; i < jewels.length - 1; i += 2) {
-                    for (int j = 0; j < jewels.length; j++) {
-                        jewels[i][j].dontMove(i + 1, j);
-                        jewels[i + 1][j].dontMove(i, j);
-                    }
-                }
-            }
+            grid.handleTap(2 * (e.getX() / screenWidth - 0.5f), 2 * (e.getY() / screenHeight - 0.5f));
+
             tri.setCenterX(tri.getCenterX()+0.5f);
-            float x = 2 * (e.getRawX() / screenWidth - 0.5f);
-            float y = 2 * (e.getRawY() / screenHeight - 0.5f);
-            System.out.println(x + " " + y);
-            System.out.println();
-            Jewel j = getClosestJewelTo(x, y);
-            if (j != null) {
-                System.out.println(j.getRow() + " " + j.getCol());
-            }
         }
 
     }
 
-    public Jewel getClosestJewelTo(float x, float y) {
-        Jewel closest = null;
-        double minDist = Double.MAX_VALUE;
-        double dist;
-        for (Jewel[] row : jewels) {
-            for (Jewel j : row) {
-                dist = j.distFrom(x, y);
-                if (dist < minDist) {
-                    minDist = dist;
-                    closest = j;
-                }
-            }
-        }
-        System.out.println(minDist);
-        if (minDist > 0.25) { // adjust this value, supposed to handle border jewels where you're not really touching anything
-            closest = null;
-        }
-        return closest;
+    public void startingAnimation() {
+
     }
 }
