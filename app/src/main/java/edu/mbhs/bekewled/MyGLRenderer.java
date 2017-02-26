@@ -89,9 +89,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         tri.draw(scratch);
         for (Jewel[] js : jewels) {
             for (Jewel j : js) {
-                //if (time == 5L){
-                    j.doMoves();
-                //}
+                j.doMoves();
                 j.draw(mMVPMatrix);
             }
         }
@@ -114,13 +112,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     jewels[i + 1][j].dontMove(i, j);
                 }
             }
-            for (float f : tri.getTriangleCoords()) System.out.print(f + " ");
-            System.out.println();
-            System.out.println(tri.getCenterX()+"sa");
             tri.setCenterX(tri.getCenterX()+0.5f);
-            System.out.println(tri.getCenterX()+"as");
-            for (float f : tri.getTriangleCoords()) System.out.print(f + " ");
-            System.out.println();
         }
 
     }

@@ -257,15 +257,10 @@ public class Triangle {
     public void setCenter(float cx, float cy) {
         this.centerX = cx;
         this.centerY = cy;
-        for (float f : triangleCoords) System.out.print(f + " ");
-        System.out.println();
         for (int i = 0; i < triangleCoords.length; i += 3){
-            System.out.println(triangleCoords[i] + " " + baseTriangleCoords[i] + " " + scale + " " + cx);
             triangleCoords[i] = baseTriangleCoords[i]*scale + cx;
             triangleCoords[i+1] = baseTriangleCoords[i+1]*scale + cy;
         }
-        for (float f : triangleCoords) System.out.print(f + " ");
-        System.out.println();
         this.setupPos();
         //this.setupImage(tinycompass);
     }
@@ -319,7 +314,6 @@ public class Triangle {
         return true;
     }
     public boolean movingVert(){
-        System.out.println(destY);
         if (Float.isNaN(destY)){
             return false;
         }
