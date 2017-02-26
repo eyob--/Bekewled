@@ -335,7 +335,7 @@ public class Triangle {
         if (!movingHoriz()){
             return false;
         }
-        System.out.println("hey man");
+        //System.out.println("hey man");
 
        setCenterX(centerX+moveInc/3*Math.signum(destX-centerX));
 
@@ -345,7 +345,7 @@ public class Triangle {
         if (!movingVert()){
             return false;
         }
-        System.out.println("hey dogg");
+        //System.out.println("hey dogg");
         setCenterY(centerY+moveInc*Math.signum(destY-centerY));
         return true;
     }

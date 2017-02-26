@@ -44,4 +44,20 @@ public class Jewel {
         picture.moveVert();
     }
 
+    public double distFrom(float x, float y) {
+        //System.out.println(picture.getCenterX() + " " + picture.getCenterY());
+        return Math.hypot(x - picture.getCenterX(), y - picture.getCenterY());
+    }
+
+    public Triangle getPicture() {
+        return picture;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getRow() {
+        return row;
+    }
 }

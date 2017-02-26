@@ -28,6 +28,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle tri;
     private float[] mRotationMatrix = new float[16];
     private Context contxt;
+
+    float screenWidth, screenHeight;
+
     public MyGLRenderer(Context c) {
         contxt = c;
     }
@@ -67,6 +70,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             float ratio = (float) width / height;
             Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
         }
+        screenWidth = width;
+        screenHeight = height;
 
     }
 
@@ -106,14 +111,44 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         if (e.getAction() == MotionEvent.ACTION_UP) {
             int go1, go2;
             System.out.println("hello");
-            for (int i = 0; i < jewels.length - 1; i += 2) {
-                for (int j = 0; j < jewels.length; j++) {
-                    jewels[i][j].dontMove(i + 1, j);
-                    jewels[i + 1][j].dontMove(i, j);
+            if (!(jewels[0][0].getPicture().movingHoriz() || jewels[0][0].getPicture().movingVert())) {
+                for (int i = 0; i < jewels.length - 1; i += 2) {
+                    for (int j = 0; j < jewels.length; j++) {
+                        jewels[i][j].dontMove(i + 1, j);
+                        jewels[i + 1][j].dontMove(i, j);
+                    }
                 }
             }
             tri.setCenterX(tri.getCenterX()+0.5f);
+            float x = 2 * (e.getRawX() / screenWidth - 0.5f);
+            float y = 2 * (e.getRawY() / screenHeight - 0.5f);
+            System.out.println(x + " " + y);
+            System.out.println();
+            Jewel j = getClosestJewelTo(x, y);
+            if (j != null) {
+                System.out.println(j.getRow() + " " + j.getCol());
+            }
         }
 
+    }
+
+    public Jewel getClosestJewelTo(float x, float y) {
+        Jewel closest = null;
+        double minDist = Double.MAX_VALUE;
+        double dist;
+        for (Jewel[] row : jewels) {
+            for (Jewel j : row) {
+                dist = j.distFrom(x, y);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = j;
+                }
+            }
+        }
+        System.out.println(minDist);
+        if (minDist > 0.25) { // adjust this value, supposed to handle border jewels where you're not really touching anything
+            closest = null;
+        }
+        return closest;
     }
 }
