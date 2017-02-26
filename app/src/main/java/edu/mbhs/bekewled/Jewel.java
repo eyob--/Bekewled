@@ -40,12 +40,8 @@ public class Jewel {
         picture.draw(mvpMatrix);
     }
     public void doMoves(){
-        if(picture.movingHoriz()){
-            picture.moveHoriz();
-        }
-        if(picture.movingVert()){
-            picture.moveVert();
-        }
+        picture.moveHoriz();
+        picture.moveVert();
     }
 
 }

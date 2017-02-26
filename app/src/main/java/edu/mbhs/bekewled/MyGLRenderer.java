@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -40,7 +41,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         // Temporary create a bitmap
         Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
-        //tri = new Triangle(1/4., -1/8., -1/8., bmp);
+        tri = new Triangle(1/4., -1/8., -1/8., bmp);
 
         for (int i = 0; i<8; i++){
             for(int j = 0; j<8; j++){
@@ -50,6 +51,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 jewels[i][j] = new Jewel(1, bmp, i, j);
             }
         }
+
 
     }
 
@@ -75,18 +77,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         long time = SystemClock.uptimeMillis() % 4000L;
         float angle = 0.090f *(((int) time));
-        Matrix.setRotateM(mRotationMatrix, 0, angle, 0, 0, -1f);
+        Matrix.setIdentityM(mRotationMatrix, 0);
+        //Matrix.setRotateM(mRotationMatrix, 0, 0*angle, 0, 0, -1f);
+        //Matrix.translateM(mRotationMatrix, 0, 1f, 0f, 0f);
 
         //originally 3 was -3. I think I am right but maybe I am wrong and the tutorial was right.
         Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
-        System.out.println("goodbye");
-        //tri.draw(scratch);
+        tri.draw(scratch);
         for (Jewel[] js : jewels) {
             for (Jewel j : js) {
-                j.doMoves();
+                //if (time == 5L){
+                    j.doMoves();
+                //}
                 j.draw(mMVPMatrix);
             }
         }
@@ -100,15 +105,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void processTouchEvent(MotionEvent e) {
-        int go1, go2;
-        System.out.println("hello");
-        for(int i = 0; i<jewels.length-1; i+=2){
-            for(int j = 0; j<jewels.length; j++){
-                jewels[i][j].dontMove(i+1,j);
-                jewels[i+1][j].dontMove(i,j);
+        if (e.getAction() == MotionEvent.ACTION_UP) {
+            int go1, go2;
+            System.out.println("hello");
+            for (int i = 0; i < jewels.length - 1; i += 2) {
+                for (int j = 0; j < jewels.length; j++) {
+                    jewels[i][j].dontMove(i + 1, j);
+                    jewels[i + 1][j].dontMove(i, j);
+                }
             }
+            for (float f : tri.getTriangleCoords()) System.out.print(f + " ");
+            System.out.println();
+            System.out.println(tri.getCenterX()+"sa");
+            tri.setCenterX(tri.getCenterX()+0.5f);
+            System.out.println(tri.getCenterX()+"as");
+            for (float f : tri.getTriangleCoords()) System.out.print(f + " ");
+            System.out.println();
         }
-
 
     }
 }

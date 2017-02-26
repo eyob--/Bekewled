@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -77,7 +78,7 @@ public class Triangle {
     private float centerX = 0;
     private float centerY = 0;
     private float scale = 1;
-    private float[] triangleCoords = baseTriangleCoords;
+    private float[] triangleCoords = new float[baseTriangleCoords.length];
 
     private float destX = Float.NaN;
     private float destY = Float.NaN;
@@ -87,12 +88,17 @@ public class Triangle {
     private Bitmap tinycompass;
 
     float[] color = {0.637f, 0.770f, 0.223f, 1.0f};
-    private float moveInc = 0.1f;
+    private float moveInc = 0.005f;
 
     public Triangle() {
         setupPos();
         setupShad();
     }
+
+    public float[] getTriangleCoords() {
+        return triangleCoords;
+    }
+
     private void setupPos(){
         ByteBuffer bb = ByteBuffer.allocateDirect(triangleCoords.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -193,6 +199,7 @@ public class Triangle {
 
         setupShad();
         setupImage(b);
+        this.setupPos();
     }
     public void draw(float[] mvpMatrix) {
         GLES20.glUseProgram(mProgram);
@@ -200,6 +207,11 @@ public class Triangle {
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
+        float[] scratch = new float[16];
+        float[] fake = new float[16];
+        Matrix.setIdentityM(fake, 0);
+        Matrix.translateM(fake, 0, centerX, centerY, 0f);
+        Matrix.multiplyMM(scratch, 0, mvpMatrix, 0, fake, 0);
 
 
         // Get handle to texture coordinates location
@@ -245,10 +257,15 @@ public class Triangle {
     public void setCenter(float cx, float cy) {
         this.centerX = cx;
         this.centerY = cy;
+        for (float f : triangleCoords) System.out.print(f + " ");
+        System.out.println();
         for (int i = 0; i < triangleCoords.length; i += 3){
+            System.out.println(triangleCoords[i] + " " + baseTriangleCoords[i] + " " + scale + " " + cx);
             triangleCoords[i] = baseTriangleCoords[i]*scale + cx;
             triangleCoords[i+1] = baseTriangleCoords[i+1]*scale + cy;
         }
+        for (float f : triangleCoords) System.out.print(f + " ");
+        System.out.println();
         this.setupPos();
         //this.setupImage(tinycompass);
     }
@@ -270,18 +287,26 @@ public class Triangle {
         destY = y;
     }
     public void setDest2(float x, float y){
-        destX = x;
-        destY = y;
+        if (x == centerX) {
+            destX = Float.NaN;
+            destY = y;
+        }
+        if (y == centerY){
+            destX = x;
+            destY = Float.NaN;
+        }
         destX2 = centerX;
         destY2 = centerY;
     }
     public boolean movingHoriz(){
-        if (destX == Float.NaN){
+       // System.out.println(destX + " " + (destX == Float.NaN));
+        if (Float.isNaN(destX)){
+            //System.out.println("boop");
             return false;
         }
         if (Math.abs(destX-centerX)<moveInc){
             setCenterX(destX);
-            if(destX2 != Float.NaN){
+            if(!Float.isNaN(destX2)){
                 destX = destX2;
                 destX2 = Float.NaN;
                 return true;
@@ -294,12 +319,13 @@ public class Triangle {
         return true;
     }
     public boolean movingVert(){
-        if (destY == Float.NaN){
+        System.out.println(destY);
+        if (Float.isNaN(destY)){
             return false;
         }
         else if (Math.abs(destY-centerY)<moveInc){
             setCenterY(destY);
-            if(destY2 != Float.NaN){
+            if(!Float.isNaN(destY2)){
                 destY = destY2;
                 destY2 = Float.NaN;
                 return true;
@@ -315,16 +341,18 @@ public class Triangle {
         if (!movingHoriz()){
             return false;
         }
+        System.out.println("hey man");
 
        setCenterX(centerX+moveInc/3*Math.signum(destX-centerX));
 
         return true;
     }
     public boolean moveVert(){
-        if (!movingHoriz()){
+        if (!movingVert()){
             return false;
         }
-       // setCenterY(centerY+moveInc*Math.signum(destY-centerY));
+        System.out.println("hey dogg");
+        setCenterY(centerY+moveInc*Math.signum(destY-centerY));
         return true;
     }
 
