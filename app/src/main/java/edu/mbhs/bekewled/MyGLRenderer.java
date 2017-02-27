@@ -49,7 +49,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         int[] ids = new int[files.length];
         for (int k = 0; k<files.length; k++){
             ids[k] = contxt.getResources().getIdentifier("drawable/"+files[k], null, contxt.getPackageName());
-            bs[k] = BitmapFactory.decodeResource(contxt.getResources(), id);
+            bs[k] = BitmapFactory.decodeResource(contxt.getResources(), ids[k]);
         }
         // Temporary create a bitmap
         //Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
