@@ -9,7 +9,7 @@
 
     <item>
         <bitmap
-            android:src="@drawable/mandy_icon"
+            android:src="@drawable/mandlebrot"
             android:gravity="center" />
     </item>
 </layer-list>

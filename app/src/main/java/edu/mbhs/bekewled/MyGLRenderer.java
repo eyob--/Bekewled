@@ -43,7 +43,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        int id = contxt.getResources().getIdentifier("drawable/mandy_icon", null,
+        int id = contxt.getResources().getIdentifier("drawable/mandlebrot", null,
                 contxt.getPackageName());
 
         // Temporary create a bitmap
