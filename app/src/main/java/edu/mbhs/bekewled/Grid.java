@@ -9,11 +9,14 @@ import java.util.ArrayList;
 public class Grid {
 
     Jewel[][] jewels;
-
+    public Bitmap[] pics;
     public Grid(Jewel[][] grid) {
         jewels = grid;
     }
-
+    public Grid(Jewel[][] grid, Bitmap[] bs) {
+        jewels = grid;
+        pics = bs;
+    }
     public void handleTap(float xTap, float yTap) {
         if (!(jewels[0][0].getPicture().movingHoriz() || jewels[0][0].getPicture().movingVert())) {
             for (int i = 0; i < jewels.length - 1; i += 2) {
