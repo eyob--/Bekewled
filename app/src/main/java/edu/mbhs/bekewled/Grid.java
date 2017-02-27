@@ -1,5 +1,7 @@
 package edu.mbhs.bekewled;
 
+import java.util.ArrayList;
+
 /**
  * Created by eytsegay on 2/26/17.
  */
@@ -48,6 +50,68 @@ public class Grid {
             closest = null;
         }
         return closest;
+    }
+
+    public int[][][] jewelMatch(int row, int col){
+        Jewel.JewelType type = jewels[row][col].getType();
+        ArrayList<int[]> horiz = new ArrayList<int[]>();
+        ArrayList<int[]> vert = new ArrayList<int[]>();
+
+        int i = row;
+        for (; i>=0; i--){
+            Jewel g = jewels[i][col];
+            if (g.getType()!= type){
+                break;
+            }
+        }
+        for (; i<8; i++){
+            Jewel g = jewels[i][col];
+            if (g.getType() == type){
+                vert.add(new int[]{i,col});
+            }
+            else{
+                break;
+            }
+        }
+
+        i = col;
+        for (; i>=0; i--){
+            Jewel g = jewels[row][i];
+            if (g.getType()!= type){
+                break;
+            }
+        }
+        for (; i<8; i++){
+            Jewel g = jewels[row][i];
+            if (g.getType() == type){
+                vert.add(new int[]{row,i});
+            }
+            else{
+                break;
+            }
+        }
+        int[][][] toRet = new int[2][][];
+        toRet[0] = null;
+        toRet[1] = null;
+        if (vert.size() >= 3){
+            int[][] a = new int[vert.size()][];
+            int place = 0;
+            for (int[] k : vert){
+                a[place] = k;
+                place++;
+            }
+            toRet[1] = a;
+        }
+        if (horiz.size() >= 3){
+            int[][] a = new int[horiz.size()][];
+            int place = 0;
+            for (int[] k : horiz){
+                a[place] = k;
+                place++;
+            }
+            toRet[0] = a;
+        }
+        return toRet;
     }
 
 }
