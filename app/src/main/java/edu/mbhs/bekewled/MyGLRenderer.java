@@ -18,7 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
-
+    public static final String[] files = {"koch","sierpinski","carpet","dragon","tree","apolonian", "hilbert","mandlebrot"};
     private final float[] mMVPMatrix = new float[16];
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
@@ -43,22 +43,28 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        int id = contxt.getResources().getIdentifier("drawable/mandlebrot", null,
-                contxt.getPackageName());
-
+        //int id = contxt.getResources().getIdentifier("drawable/mandlebrot", null,
+        //        contxt.getPackageName());
+        Bitmap[] bs = new Bitmap[files.length];
+        int[] ids = new int[files.length];
+        for (int k = 0; k<files.length; k++){
+            ids[k] = contxt.getResources().getIdentifier("drawable/"+files[k], null, contxt.getPackageName());
+            bs[k] = BitmapFactory.decodeResource(contxt.getResources(), id);
+        }
         // Temporary create a bitmap
-        Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
-        tri = new Triangle(1/4., -1/8., -1/8., bmp);
+        //Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
+        tri = new Triangle(1/4., -1/8., -1/8., bs[bs.length-1]);
 
         for (int i = 0; i<8; i++){
             for(int j = 0; j<8; j++){
                 float x = -1/16+i/8f;
                 float y = -1/16+j/8f;
                 //triangles[(i+8)*16+j+8] = new Triangle(1/8.0, x, y);
-                jewels[i][j] = new Jewel(1, bmp, i, j);
+                int type = (int)(Math.random()*files.length);
+                jewels[i][j] = new Jewel(type, bs[type], i, j);
             }
         }
-        grid = new Grid(jewels);
+        grid = new Grid(jewels, bs);
 
     }
 
@@ -96,7 +102,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
         tri.draw(scratch);
-        for (Jewel[] js : jewels) {
+        for (Jewel[] js : grid.jewels) {
             for (Jewel j : js) {
                 j.doMoves();
                 j.draw(mMVPMatrix);
