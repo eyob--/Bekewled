@@ -54,7 +54,13 @@ public class Grid {
         }
         return closest;
     }
-
+    //bad name
+    //called when the user tries a match
+    //probably called out of handle tap
+    public void userMatch(int row1, int col1, int row2, int col2){
+        
+        
+    }
     public int[][][] jewelMatch(int row, int col){
         Jewel.JewelType type = jewels[row][col].getType();
         ArrayList<int[]> horiz = new ArrayList<int[]>();
