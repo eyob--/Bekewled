@@ -9,11 +9,14 @@ import java.util.ArrayList;
 public class Grid {
 
     Jewel[][] jewels;
-
+    public Bitmap[] pics;
     public Grid(Jewel[][] grid) {
         jewels = grid;
     }
-
+    public Grid(Jewel[][] grid, Bitmap[] bs) {
+        jewels = grid;
+        pics = bs;
+    }
     public void handleTap(float xTap, float yTap) {
         if (!(jewels[0][0].getPicture().movingHoriz() || jewels[0][0].getPicture().movingVert())) {
             for (int i = 0; i < jewels.length - 1; i += 2) {
@@ -51,7 +54,13 @@ public class Grid {
         }
         return closest;
     }
-
+    //bad name
+    //called when the user tries a match
+    //probably called out of handle tap
+    public void userMatch(int row1, int col1, int row2, int col2){
+        
+        
+    }
     public int[][][] jewelMatch(int row, int col){
         Jewel.JewelType type = jewels[row][col].getType();
         ArrayList<int[]> horiz = new ArrayList<int[]>();
