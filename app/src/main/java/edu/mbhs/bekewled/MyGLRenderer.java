@@ -8,6 +8,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -30,6 +31,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Context contxt;
 
     private Grid grid;
+
+    private Square square;
 
     float screenWidth, screenHeight;
 
@@ -65,6 +68,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             }
         }
         grid = new Grid(jewels, bs);
+        square = new Square(0.5f, -0.5f, -0.5f, 0.5f, 0f, new float[]{1f, 0f, 0f, 1f});
 
     }
 
@@ -108,6 +112,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 j.draw(mMVPMatrix);
             }
         }
+        square.draw(mMVPMatrix);
     }
 
     public static int loadShader(int type, String shaderCode) {
@@ -115,6 +120,26 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);
         return shader;
+    }
+
+    /**
+     * Utility method for debugging OpenGL calls. Provide the name of the call
+     * just after making it:
+     *
+     * <pre>
+     * mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+     * MyGLRenderer.checkGlError("glGetUniformLocation");</pre>
+     *
+     * If the operation is not successful, the check throws an error.
+     *
+     * @param glOperation - Name of the OpenGL call to check.
+     */
+    public static void checkGlError(String glOperation) {
+        int error;
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+            Log.e("MyGLRenderer", glOperation + ": glError " + error);
+            throw new RuntimeException(glOperation + ": glError " + error);
+        }
     }
 
     public void processTouchEvent(MotionEvent e) {
