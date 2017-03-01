@@ -63,6 +63,12 @@ public class Grid {
         
         
     }
+    public void matchFall(int[][] gone){
+        for (int[] ori:gone){
+
+        }
+
+    }
     public int[][][] jewelMatch(int row, int col){
         Jewel.JewelType type = jewels[row][col].getType();
         ArrayList<int[]> horiz = new ArrayList<int[]>();
