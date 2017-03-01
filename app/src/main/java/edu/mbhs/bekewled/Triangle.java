@@ -133,9 +133,6 @@ public class Triangle {
         GLES20.glGenTextures(8, texturenames, 0);
 
         for (int i = 0; i < 8; i++) {
-            // Bind texture to texturename
-            // GLES20.glGenTextures(1, texturenames, i);
-
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
 
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[i]);
@@ -170,54 +167,7 @@ public class Triangle {
         uvBuffer.put(uvs);
         uvBuffer.position(0);
 
-        // Generate Textures, if more needed, alter these numbers.
-        /*texturenames = new int[2];
-        GLES20.glGenTextures(2, texturenames, 0);
 
-
-        // Bind texture to texturename
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
-
-        // Set filtering
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
-                GLES20.GL_LINEAR);
-
-        // Set wrapping mode
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
-
-        // Load the bitmap into the bound texture.
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.bs[0], 0);
-
-
-
-
-        //GLES20.glGenTextures(1, texturenames, 0);
-
-
-        // Bind texture to texturename
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[1]);
-
-        // Set filtering
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
-                GLES20.GL_LINEAR);
-
-        // Set wrapping mode
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
-
-        // Load the bitmap into the bound texture.
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.bs[1], 0);
-
-        // We are done using the bitmap so we should recycle it.
-        //bmp.recycle();
-*/
     }
     public Triangle(double ex, double wy) {
         float x = (float) ex;

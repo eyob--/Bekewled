@@ -29,7 +29,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle tri;
     private float[] mRotationMatrix = new float[16];
     private Context contxt;
-    public static int[] texturenames;
     private Grid grid;
     public static Bitmap[] bs;
     float screenWidth, screenHeight;
@@ -137,30 +136,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             ids[k] = contxt.getResources().getIdentifier("drawable/" + files[k], null, contxt.getPackageName());
             bs[k] = BitmapFactory.decodeResource(contxt.getResources(), ids[k]);
         }
-        /*texturenames = new int[10];
-        GLES20.glGenTextures(10, texturenames, 0);
 
-        for (int i = 0; i < files.length*0+1; i++) {
-            // Bind texture to texturename
-           // GLES20.glGenTextures(1, texturenames, i);
-
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0+i);
-
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[i]);
-
-            // Set filtering
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                    GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
-                    GLES20.GL_LINEAR);
-
-            // Set wrapping mode
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-
-            // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bs[i], 0);
-        }*/
     }
     public void startingAnimation() {
 
