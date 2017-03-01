@@ -110,13 +110,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
         //tri.draw(scratch);
+
         for (Jewel[] js : grid.jewels) {
             for (Jewel j : js) {
                 j.doMoves();
                 j.draw(mMVPMatrix);
             }
         }
-        square.draw(mMVPMatrix);
+       // square.draw(mMVPMatrix);
     }
 
     public static int loadShader(int type, String shaderCode) {

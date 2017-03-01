@@ -49,8 +49,16 @@ public class Jewel {
         row = roo;
         col = cool;
         //picture.setDest((cool-4)/4f*0.8f, (roo-4)/4f*0.8f);
-        float[] pos = intToFloatPos(roo, cool);
+        float[] pos = intToFloatPos(cool, roo);
         picture.setDest(pos[0], pos[1]);
+    }
+    public void fallpos(int roo, int cool, int roo2, int cool2) {
+        row = roo;
+        col = cool;
+        float[] posf = intToFloatPos(cool, roo);
+        float[] pos0 = intToFloatPos(cool2, roo2);
+        picture.setCenter(pos0[0],pos0[1]);
+        picture.setDest(posf[0],posf[1]);
     }
     public void dontMove(int roo, int cool){
         //picture.setDest2((cool - 4) / 4f * 0.8f, (roo - 4) / 4f * 0.8f);
