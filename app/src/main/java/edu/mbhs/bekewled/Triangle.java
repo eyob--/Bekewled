@@ -85,8 +85,8 @@ public class Triangle {
     private float destX2 = Float.NaN;
     private float destY2 = Float.NaN;
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
-    private Bitmap tinycompass;
-
+   // private Bitmap tinycompass;
+    private int type;
     float[] color = {0.637f, 0.770f, 0.223f, 1.0f};
     private float moveInc = 0.005f;
 
@@ -126,8 +126,36 @@ public class Triangle {
         GLES20.glAttachShader(mProgram, fragmentShader);
         GLES20.glLinkProgram(mProgram);
     }
-    private void setupImage(Bitmap bmp){
-        tinycompass = bmp;
+    private static int[] texturenames;
+    static {
+
+        texturenames = new int[8];
+        GLES20.glGenTextures(8, texturenames, 0);
+
+        for (int i = 0; i < 8; i++) {
+            // Bind texture to texturename
+            // GLES20.glGenTextures(1, texturenames, i);
+
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[i]);
+
+            // Set filtering
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                    GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                    GLES20.GL_LINEAR);
+
+            // Set wrapping mode
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.bs[i], 0);
+        }
+    }
+    private void setupImage(){
+       // tinycompass = bmp;
         float[] uvs = new float[] {
                 0.0f, 0.0f,
                 0.0f, 1.0f,
@@ -143,8 +171,8 @@ public class Triangle {
         uvBuffer.position(0);
 
         // Generate Textures, if more needed, alter these numbers.
-        int[] texturenames = new int[1];
-        GLES20.glGenTextures(1, texturenames, 0);
+        /*texturenames = new int[2];
+        GLES20.glGenTextures(2, texturenames, 0);
 
 
         // Bind texture to texturename
@@ -162,10 +190,34 @@ public class Triangle {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
 
         // Load the bitmap into the bound texture.
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.bs[0], 0);
+
+
+
+
+        //GLES20.glGenTextures(1, texturenames, 0);
+
+
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[1]);
+
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                GLES20.GL_LINEAR);
+
+        // Set wrapping mode
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
+
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, MyGLRenderer.bs[1], 0);
 
         // We are done using the bitmap so we should recycle it.
         //bmp.recycle();
+*/
     }
     public Triangle(double ex, double wy) {
         float x = (float) ex;
@@ -180,7 +232,7 @@ public class Triangle {
         this.setCenter(x, y);
 
         setupShad();
-        setupImage(b);
+        setupImage();
     }
     public Triangle(double s, double ex, double wy){
         this.setScale((float) s);
@@ -198,7 +250,17 @@ public class Triangle {
         this.setCenter(x, y);
 
         setupShad();
-        setupImage(b);
+        setupImage();
+        this.setupPos();
+    }
+    public Triangle(double s, double ex, double wy, int typ){
+        this.setScale((float) s);
+        float x = (float) ex;
+        float y = (float) wy;
+        this.setCenter(x, y);
+        type = typ;
+        setupShad();
+        setupImage();
         this.setupPos();
     }
     public void draw(float[] mvpMatrix) {
@@ -236,11 +298,12 @@ public class Triangle {
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
 
 
-        int mSamplerLoc = GLES20.glGetUniformLocation (mProgram,
-                "s_texture" );
-
+        int mSamplerLoc = GLES20.glGetUniformLocation (mProgram, "s_texture" );
+        GLES20.glUniform1i(mSamplerLoc, type);
         // Set the sampler texture unit to 0, where we have saved the texture.
-        GLES20.glUniform1i(mSamplerLoc, 0);
+
+        //GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+      // GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[1]);
 
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);

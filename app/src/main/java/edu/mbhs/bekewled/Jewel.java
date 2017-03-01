@@ -36,6 +36,15 @@ public class Jewel {
         col = cahl;
         j = type;
     }
+    public Jewel(int type, int roe, int cahl){
+        System.out.println((cahl-4)/4f*0.8f);
+        //picture = new Triangle(jewelWidth, (cahl-4)/4f*0.8, (roe-4)/4f*0.8, b);
+        float[] pos = intToFloatPos(cahl, roe);
+        picture = new Triangle(jewelWidth, pos[0], pos[1], type);
+        row = roe;
+        col = cahl;
+        j = JewelType.values()[type];
+    }
     public void setpos(int roo, int cool){
         row = roo;
         col = cool;

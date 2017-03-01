@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -28,13 +29,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle tri;
     private float[] mRotationMatrix = new float[16];
     private Context contxt;
-
+    public static int[] texturenames;
     private Grid grid;
-
+    public static Bitmap[] bs;
     float screenWidth, screenHeight;
 
     public MyGLRenderer(Context c) {
         contxt = c;
+        loadTex();
     }
 
     @Override
@@ -45,7 +47,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //int id = contxt.getResources().getIdentifier("drawable/mandlebrot", null,
         //        contxt.getPackageName());
-        Bitmap[] bs = new Bitmap[files.length];
+       /* Bitmap[] bs = new Bitmap[files.length];
         int[] ids = new int[files.length];
         for (int k = 0; k<files.length; k++){
             ids[k] = contxt.getResources().getIdentifier("drawable/"+files[k], null, contxt.getPackageName());
@@ -53,19 +55,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
         // Temporary create a bitmap
         //Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
-        tri = new Triangle(1/4., -1/8., -1/8., bs[bs.length-1]);
-
+*/
+        int type;
         for (int i = 0; i<8; i++){
             for(int j = 0; j<8; j++){
                 float x = -1/16+i/8f;
                 float y = -1/16+j/8f;
                 //triangles[(i+8)*16+j+8] = new Triangle(1/8.0, x, y);
-                int type = (int)(Math.random()*files.length);
-                jewels[i][j] = new Jewel(type, bs[type], i, j);
+                type = (int)(Math.random()*files.length);
+
+                jewels[i][j] = new Jewel(type, i, j);
             }
         }
-        grid = new Grid(jewels, bs);
-
+        grid = new Grid(jewels);
+       // tri = new Triangle(1/4., -1/8., -1/8., bs[3]);
     }
 
     @Override
@@ -101,7 +104,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
-        tri.draw(scratch);
+        //tri.draw(scratch);
         for (Jewel[] js : grid.jewels) {
             for (Jewel j : js) {
                 j.doMoves();
@@ -123,11 +126,42 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             System.out.println("hello");
             grid.handleTap(2 * (e.getX() / screenWidth - 0.5f), 2 * (e.getY() / screenHeight - 0.5f));
 
-            tri.setCenterX(tri.getCenterX()+0.5f);
+//            tri.setCenterX(tri.getCenterX()+0.5f);
         }
 
     }
+    public void loadTex() {
+        bs = new Bitmap[files.length];
+        int[] ids = new int[files.length];
+        for (int k = 0; k < files.length; k++) {
+            ids[k] = contxt.getResources().getIdentifier("drawable/" + files[k], null, contxt.getPackageName());
+            bs[k] = BitmapFactory.decodeResource(contxt.getResources(), ids[k]);
+        }
+        /*texturenames = new int[10];
+        GLES20.glGenTextures(10, texturenames, 0);
 
+        for (int i = 0; i < files.length*0+1; i++) {
+            // Bind texture to texturename
+           // GLES20.glGenTextures(1, texturenames, i);
+
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0+i);
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[i]);
+
+            // Set filtering
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                    GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                    GLES20.GL_LINEAR);
+
+            // Set wrapping mode
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bs[i], 0);
+        }*/
+    }
     public void startingAnimation() {
 
     }
