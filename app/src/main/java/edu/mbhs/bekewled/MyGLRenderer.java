@@ -32,7 +32,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private Grid grid;
 
-    private Square square;
+    private Square square, square1, square2;
+    private boolean makeSquare1, makeSquare2;
 
     float screenWidth, screenHeight;
 
@@ -68,7 +69,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             }
         }
         grid = new Grid(jewels, bs);
-        square = new Square(0.5f, -0.5f, -0.5f, 0.5f, 0f, new float[]{1f, 0f, 0f, 1f});
+        //square = new Square(0.55f, 0.4f, -0.95f, -0.7f, 0f, new float[]{1f, 0f, 0f, 1f});
 
     }
 
@@ -92,6 +93,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        drawBackground();
+
         float[] scratch = new float[16];
 
         long time = SystemClock.uptimeMillis() % 4000L;
@@ -112,7 +115,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 j.draw(mMVPMatrix);
             }
         }
-        square.draw(mMVPMatrix);
+
+        //square = new Square(0.55f, 0.4f, -0.95f, -0.7f, 0f, new float[]{1f, 0f, 0f, 1f});
+        //square.draw(mMVPMatrix);
     }
 
     public static int loadShader(int type, String shaderCode) {
@@ -146,7 +151,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         if (e.getAction() == MotionEvent.ACTION_UP) {
             int go1, go2;
             System.out.println("hello");
-            grid.handleTap(2 * (e.getX() / screenWidth - 0.5f), 2 * (e.getY() / screenHeight - 0.5f));
+            grid.handleTap(2 * (e.getX() / screenWidth - 0.5f), 2 * (e.getY() / screenHeight - 0.5f), this);
 
             tri.setCenterX(tri.getCenterX()+0.5f);
         }
@@ -155,5 +160,56 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     public void startingAnimation() {
 
+    }
+
+    public void drawBackground() {
+        GLES20.glClearColor(.216f, .643f, .478f, 1f);
+
+        if (makeSquare1) {
+            resetSquare1();
+            makeSquare1 = false;
+        }
+        if (makeSquare2) {
+            resetSquare2();
+            makeSquare2 = false;
+        }
+        if (square1 != null) {
+            square1.draw(mMVPMatrix);
+        }
+        if (square2 != null) {
+            square2.draw(mMVPMatrix);
+        }
+        //square.draw(mMVPMatrix);
+    }
+
+    public void makeSquare1() {
+        makeSquare1 = true;
+    }
+
+    public void makeSquare2() {
+        makeSquare2 = true;
+    }
+
+    public void resetSquare1() {
+        float extralen = 0.01f;
+        float cx = grid.chosenJewel1.getPicture().getCenterX() - extralen;
+        float cy = grid.chosenJewel1.getPicture().getCenterY() - extralen;
+        float len = grid.chosenJewel1.getPicture().getSidelength() + 2 * extralen;
+        System.out.println(grid.chosenJewel1.getRow() + " " + grid.chosenJewel1.getCol());
+        System.out.println(cx + " " + cy + " " + len);
+        square1 = new Square(cy + len, cy, cx, cx + len, 0f, new float[]{1f, 1f, 0f, 1f});
+    }
+
+    public void resetSquare2() {
+        float extralen = 0.01f;
+        float cx = grid.chosenJewel2.getPicture().getCenterX() - extralen;
+        float cy = grid.chosenJewel2.getPicture().getCenterY() - extralen;
+        float len = grid.chosenJewel2.getPicture().getSidelength() + 2 * extralen;
+        square2 = new Square(cy + len, cy, cx, cx + len, 0f, new float[]{1f, 1f, 0f, 1f});
+    }
+
+    public void clearSquares() {
+        square1 = null;
+        square2 = null;
     }
 }

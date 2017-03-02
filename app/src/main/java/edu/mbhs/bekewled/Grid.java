@@ -12,6 +12,9 @@ public class Grid {
 
     Jewel[][] jewels;
     public Bitmap[] pics;
+
+    public Jewel chosenJewel1, chosenJewel2;
+
     public Grid(Jewel[][] grid) {
         jewels = grid;
     }
@@ -19,7 +22,7 @@ public class Grid {
         jewels = grid;
         pics = bs;
     }
-    public void handleTap(float xTap, float yTap) {
+    public void handleTap(float xTap, float yTap, MyGLRenderer renderer) {
         if (!(jewels[0][0].getPicture().movingHoriz() || jewels[0][0].getPicture().movingVert())) {
             for (int i = 0; i < jewels.length - 1; i += 2) {
                 for (int j = 0; j < jewels.length; j++) {
@@ -34,7 +37,35 @@ public class Grid {
         Jewel j = getClosestJewelTo(xTap, yTap);
         if (j != null) {
             System.out.println(j.getRow() + " " + j.getCol());
+            if (chosenJewel1 == null) {
+                chosenJewel1 = j;
+                renderer.makeSquare1();
+            }
+            else if (chosenJewel2 == null) {
+                if (j == chosenJewel1) {
+                    clearSelection(renderer);
+                }
+                else {
+                    chosenJewel2 = j;
+                    renderer.makeSquare2();
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    clearSelection(renderer);
+                }
+            }
         }
+        else {
+            clearSelection(renderer);
+        }
+    }
+
+    public void clearSelection(MyGLRenderer renderer) {
+        chosenJewel1 = null;
+        chosenJewel2 = null;
+        renderer.clearSquares();
     }
 
     public Jewel getClosestJewelTo(float x, float y) {

@@ -277,6 +277,10 @@ public class Triangle {
         this.scale = s;
     }
 
+    public float getSidelength() {
+        return scale;
+    }
+
     public void setDest(float x, float y){
         destX = x;
         destY = y;
