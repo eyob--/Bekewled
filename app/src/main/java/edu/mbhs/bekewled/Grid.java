@@ -82,6 +82,18 @@ public class Grid {
     public void matchFall(int[][][] gone){
         Jewel[][] missing = new Jewel[2][];
 
+        if(gone[0]!=null){
+            for (int[] pos : gone[0]){
+                jewels[pos[0]][pos[1]].setpos(9,9);
+            }
+        }
+        if(gone[1]!=null){
+
+            for (int[] pos : gone[1]) {
+                jewels[pos[0]][pos[1]].setpos(9, 9);
+            }
+
+        }/*
         //row, col
         if(gone[1].length>0) {
             missing[1] = new Jewel[gone[1].length];
@@ -91,12 +103,15 @@ public class Grid {
 
             }
             int j;
+            //why
             for (j = gone[1][gone[1].length - 1][0] + 1; j < 8 - missing[1].length - 1; j++) {
-                jewels[j][gone[1][0][1]] = jewels[j + 1][gone[1][0][1]];
-                jewels[j][gone[1][0][1]].setpos(j, gone[1][0][1]);
+                //still sketch
+                jewels[j-gone[1].length][gone[1][0][1]] = jewels[j + 1][gone[1][0][1]];
+                jewels[j-gone[1].length][gone[1][0][1]].setpos(j, gone[1][0][1]);
             }
             int j0 = j;
             for (; j < 8; j++) {
+                //what even
                 jewels[j][gone[1][0][1]] = missing[1][j - j0];
                 jewels[j][gone[1][0][1]].fallpos(j, gone[1][0][1], 8 + j - j0, gone[1][0][1]);
             }
@@ -126,7 +141,7 @@ public class Grid {
             }
 
         }
-
+*/
     }
     public int[][][] jewelMatch(int row, int col){
         Jewel.JewelType type = jewels[row][col].getType();
@@ -140,9 +155,7 @@ public class Grid {
                 break;
             }
         }
-        if(i<0){
-            i=0;
-        }
+        i++;
         for (; i<8; i++){
             Jewel g = jewels[i][col];
             if (g.getType() == type){
@@ -153,6 +166,8 @@ public class Grid {
             }
         }
 
+
+
         i = col;
         for (; i>=0; i--){
             Jewel g = jewels[row][i];
@@ -160,13 +175,11 @@ public class Grid {
                 break;
             }
         }
-        if(i<0){
-            i=0;
-        }
+        i++;
         for (; i<8; i++){
             Jewel g = jewels[row][i];
             if (g.getType() == type){
-                vert.add(new int[]{row,i});
+                horiz.add(new int[]{row, i});
             }
             else{
                 break;
