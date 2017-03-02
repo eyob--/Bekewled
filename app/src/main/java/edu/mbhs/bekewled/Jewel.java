@@ -36,12 +36,29 @@ public class Jewel {
         col = cahl;
         j = type;
     }
+    public Jewel(int type, int roe, int cahl){
+        System.out.println((cahl-4)/4f*0.8f);
+        //picture = new Triangle(jewelWidth, (cahl-4)/4f*0.8, (roe-4)/4f*0.8, b);
+        float[] pos = intToFloatPos(cahl, roe);
+        picture = new Triangle(jewelWidth, pos[0], pos[1], type);
+        row = roe;
+        col = cahl;
+        j = JewelType.values()[type];
+    }
     public void setpos(int roo, int cool){
         row = roo;
         col = cool;
         //picture.setDest((cool-4)/4f*0.8f, (roo-4)/4f*0.8f);
-        float[] pos = intToFloatPos(roo, cool);
+        float[] pos = intToFloatPos(cool, roo);
         picture.setDest(pos[0], pos[1]);
+    }
+    public void fallpos(int roo, int cool, int roo2, int cool2) {
+        row = roo;
+        col = cool;
+        float[] posf = intToFloatPos(cool, roo);
+        float[] pos0 = intToFloatPos(cool2, roo2);
+        picture.setCenter(pos0[0],pos0[1]);
+        picture.setDest(posf[0],posf[1]);
     }
     public void dontMove(int roo, int cool){
         //picture.setDest2((cool - 4) / 4f * 0.8f, (roo - 4) / 4f * 0.8f);

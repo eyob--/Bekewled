@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -29,8 +30,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle tri;
     private float[] mRotationMatrix = new float[16];
     private Context contxt;
-
     private Grid grid;
+    public static Bitmap[] bs;
 
     private Square square, square1, square2;
     private boolean makeSquare1, makeSquare2;
@@ -39,6 +40,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     public MyGLRenderer(Context c) {
         contxt = c;
+        loadTex();
     }
 
     @Override
@@ -49,7 +51,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //int id = contxt.getResources().getIdentifier("drawable/mandlebrot", null,
         //        contxt.getPackageName());
-        Bitmap[] bs = new Bitmap[files.length];
+       /* Bitmap[] bs = new Bitmap[files.length];
         int[] ids = new int[files.length];
         for (int k = 0; k<files.length; k++){
             ids[k] = contxt.getResources().getIdentifier("drawable/"+files[k], null, contxt.getPackageName());
@@ -57,19 +59,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
         // Temporary create a bitmap
         //Bitmap bmp = BitmapFactory.decodeResource(contxt.getResources(), id);
-        tri = new Triangle(1/4., -1/8., -1/8., bs[bs.length-1]);
-
+*/
+        int type;
         for (int i = 0; i<8; i++){
             for(int j = 0; j<8; j++){
                 float x = -1/16+i/8f;
                 float y = -1/16+j/8f;
                 //triangles[(i+8)*16+j+8] = new Triangle(1/8.0, x, y);
-                int type = (int)(Math.random()*files.length);
-                jewels[i][j] = new Jewel(type, bs[type], i, j);
+                type = (int)(Math.random()*files.length);
+
+                jewels[i][j] = new Jewel(type, i, j);
             }
         }
-        grid = new Grid(jewels, bs);
-        //square = new Square(0.55f, 0.4f, -0.95f, -0.7f, 0f, new float[]{1f, 0f, 0f, 1f});
+        grid = new Grid(jewels);
+       // tri = new Triangle(1/4., -1/8., -1/8., bs[3]);
+        //square = new Square(0.5f, -0.5f, -0.5f, 0.5f, 0f, new float[]{1f, 0f, 0f, 1f});
 
     }
 
@@ -108,16 +112,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
-        tri.draw(scratch);
+        //tri.draw(scratch);
+
         for (Jewel[] js : grid.jewels) {
             for (Jewel j : js) {
                 j.doMoves();
                 j.draw(mMVPMatrix);
             }
         }
-
-        //square = new Square(0.55f, 0.4f, -0.95f, -0.7f, 0f, new float[]{1f, 0f, 0f, 1f});
-        //square.draw(mMVPMatrix);
+       // square.draw(mMVPMatrix);
     }
 
     public static int loadShader(int type, String shaderCode) {
@@ -153,11 +156,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             System.out.println("hello");
             grid.handleTap(2 * (e.getX() / screenWidth - 0.5f), 2 * (e.getY() / screenHeight - 0.5f), this);
 
-            tri.setCenterX(tri.getCenterX()+0.5f);
+//            tri.setCenterX(tri.getCenterX()+0.5f);
         }
 
     }
+    public void loadTex() {
+        bs = new Bitmap[files.length];
+        int[] ids = new int[files.length];
+        for (int k = 0; k < files.length; k++) {
+            ids[k] = contxt.getResources().getIdentifier("drawable/" + files[k], null, contxt.getPackageName());
+            bs[k] = BitmapFactory.decodeResource(contxt.getResources(), ids[k]);
+        }
 
+    }
     public void startingAnimation() {
 
     }
