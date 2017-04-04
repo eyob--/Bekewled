@@ -24,7 +24,7 @@ public class Grid {
     }
     public void handleTap(float xTap, float yTap, MyGLRenderer renderer) {
         if (!(jewels[0][0].getPicture().movingHoriz() || jewels[0][0].getPicture().movingVert())) {
-            for (int i = 0; i < jewels.length-1; i += 2) {
+            /*for (int i = 0; i < jewels.length-1; i += 2) {
                 for (int j = 0; j < jewels.length; j++) {
                     Jewel dummy = jewels[i + 1][j];
                     jewels[i + 1][j] = jewels[i][j];
@@ -33,14 +33,14 @@ public class Grid {
                     jewels[i + 1][j].setpos(i+1, j);
 
                 }
-            }
+            }*/
         }
 
-        System.out.println(xTap + " " + yTap);
+        System.out.println("+TAP INFO+ " + xTap + " " + yTap);
         System.out.println();
-        Jewel j = getClosestJewelTo(xTap, yTap);
+        Jewel j = getClosestJewelTo(xTap, -yTap);//gabe changed this
         if (j != null) {
-            System.out.println(j.getRow() + " " + j.getCol());
+            System.out.println("+JEWEL INFO+ " + j.getRow() + " " + j.getCol());
             if (chosenJewel1 == null) {
                 chosenJewel1 = j;
                 renderer.makeSquare1();
@@ -50,13 +50,14 @@ public class Grid {
                     clearSelection(renderer);
                 }
                 else {
-                    chosenJewel2 = j;
+                    chosenJewel2 = jewels[0][0];//j;
                     renderer.makeSquare2();
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                     clearSelection(renderer);
                 }
             }

@@ -79,7 +79,8 @@ public class Jewel {
     public double distFrom(float x, float y) {
         //System.out.println(picture.getCenterX() + " " + picture.getCenterY());
         //return Math.hypot(x - picture.getCenterX(), y - picture.getCenterY());
-        float[] pos = intToFloatPos(this.row, this.col);
+        float[] pos = intToFloatPos(this.col, this.row);
+        //System.out.println("+GAB+ " + pos[0] + " " + pos[1]);
         return Math.hypot(x - pos[0], y-pos[1]);
     }
 

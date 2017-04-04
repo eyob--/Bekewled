@@ -153,7 +153,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void processTouchEvent(MotionEvent e) {
         if (e.getAction() == MotionEvent.ACTION_UP) {
             int go1, go2;
-            System.out.println("hello");
             grid.handleTap(2 * (e.getX() / screenWidth - 0.5f), 2 * (e.getY() / screenHeight - 0.5f), this);
 
 //            tri.setCenterX(tri.getCenterX()+0.5f);
@@ -207,7 +206,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float cy = grid.chosenJewel1.getPicture().getCenterY() - extralen;
         float len = grid.chosenJewel1.getPicture().getSidelength() + 2 * extralen;
         System.out.println(grid.chosenJewel1.getRow() + " " + grid.chosenJewel1.getCol());
-        System.out.println(cx + " " + cy + " " + len);
+        System.out.println("+PIC INFO+ " + cx + " " + cy + " " + len);
         square1 = new Square(cy + len, cy, cx, cx + len, 0f, new float[]{1f, 1f, 0f, 1f});
     }
 
