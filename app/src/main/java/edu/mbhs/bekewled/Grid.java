@@ -36,7 +36,9 @@ public class Grid {
             }*/
         }
 
-        System.out.println("+TAP INFO+ " + xTap + " " + yTap);
+        xTap = scaleXTap(xTap, renderer.screenWidth, renderer.screenHeight);
+        yTap = scaleYTap(yTap, renderer.screenWidth, renderer.screenHeight);
+
         System.out.println();
         Jewel j = getClosestJewelTo(xTap, -yTap);//gabe changed this
         if (j != null) {
@@ -66,6 +68,24 @@ public class Grid {
             clearSelection(renderer);
         }
         dealWithSelf();
+    }
+
+    private float scaleXTap(float xTap, float screenWidth, float screenHeight) {
+        if (screenWidth > screenHeight) {
+            return xTap * screenWidth / screenHeight;
+        }
+        else {
+            return xTap;
+        }
+    }
+
+    private float scaleYTap(float yTap, float screenWidth, float screenHeight) {
+        if (screenHeight > screenWidth) {
+            return yTap * screenHeight / screenWidth;
+        }
+        else {
+            return yTap;
+        }
     }
 
     public void clearSelection(MyGLRenderer renderer) {
